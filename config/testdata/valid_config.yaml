@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+logging:
+  level: info
+  format: json
+  buffered_channel_size: 1000
+  batch_size: 5

@@ -1,0 +1,41 @@
+services:
+  api-gateway:
+    build:
+      context: . # The root of the api-gateway project
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Expose API Gateway on port 8080
+    environment:
+      CONFIG_PATH: /app/config.yaml # Pass the config path as an environment variable
+      LOG_BUFFERED_CHANNEL_SIZE: 1000
+      LOG_BATCH_SIZE: 5
+    volumes:
+      - ./config.yaml:/app/config.yaml # Mount the config.yaml file for runtime updates
+      - ./logs:/app/logs # Mount the logs directory to the host
+    depends_on:
+      - user-service
+      - prometheus
+    networks:
+      - api-network
+
+  user-service:
+    build:
+      context: ../user-service # Adjusted to point to the user-service folder
+      dockerfile: Dockerfile # Dockerfile is directly in the user-service folder
+    ports:
+      - "8081:8081" # Expose User Service on port 8081
+    networks:
+      - api-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090" # Expose Prometheus UI on port 9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml # Mount Prometheus config
+    networks:
+      - api-network
+networks:
+  api-network:
+    driver: bridge

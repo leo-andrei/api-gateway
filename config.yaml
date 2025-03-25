@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+logging:
+  level: info
+  format: json
+
+routes:
+  - path: "/api/users"
+    targetUrl: "http://user-service:8081/users"
+    method: "GET"
+    requireAuth: true
+  
+  - path: "/api/products"
+    targetUrl: "http://product-service:8082/products"
+    method: "GET"
+    requireAuth: false
+  
+  - path: "/api/orders"
+    targetUrl: "http://order-service:8083/orders"
+    method: "POST"
+    requireAuth: true
