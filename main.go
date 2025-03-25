@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -22,7 +21,6 @@ func main() {
 	}
 	cfg, err := config.LoadConfig(configPath)
 	if err != nil {
-		fmt.Printf("Error loading config: %v", err)
 		logger := logging.NewLogService(logging.LoggingConfig{Level: "error", Format: "text"})
 		logger.Fatalf("Error loading config: %v", err)
 	}

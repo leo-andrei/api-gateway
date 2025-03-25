@@ -48,7 +48,6 @@ func NewLogService(config LoggingConfig) *LogService {
 	level, err := logrus.ParseLevel(config.Level)
 	if err != nil {
 		level = logrus.InfoLevel // Default to Info level if parsing fails
-		fmt.Printf("Error parsing log level: %v\n", err)
 	}
 	logger.SetLevel(level)
 
@@ -65,8 +64,6 @@ func NewLogService(config LoggingConfig) *LogService {
 	if envLogChanSize := os.Getenv("LOG_BUFFERED_CHANNEL_SIZE"); envLogChanSize != "" {
 		if size, err := strconv.Atoi(envLogChanSize); err == nil && size > 0 {
 			logChanSize = size
-		} else {
-			fmt.Printf("Invalid LOG_BUFFERED_CHANNEL_SIZE: %v, using default: %d\n", envLogChanSize, logChanSize)
 		}
 	}
 	// Read batch size from environment variable
@@ -75,8 +72,6 @@ func NewLogService(config LoggingConfig) *LogService {
 	if envBatchSize := os.Getenv("LOG_BATCH_SIZE"); envBatchSize != "" {
 		if size, err := strconv.Atoi(envBatchSize); err == nil && size > 0 {
 			batchSize = size
-		} else {
-			fmt.Printf("Invalid LOG_BATCH_SIZE: %v, using default: %d\n", envBatchSize, batchSize)
 		}
 	}
 
@@ -123,7 +118,6 @@ func (l *LogService) processLogs(batchSize int) {
 }
 
 func (l *LogService) flushLogs(batch []LogEntry) {
-	fmt.Printf("Flushing %d log entries\n", len(batch))
 	for _, entry := range batch {
 		l.logger.WithFields(entry.Fields).Log(entry.Level, entry.Message)
 	}
