@@ -96,7 +96,7 @@ func (l *LogService) processLogs(batchSize int) {
 		batchSize = 5 // Default to 1000 if not set or invalid
 	}
 	batch := make([]LogEntry, 0, batchSize)
-	ticker := time.NewTicker(5 * time.Second)
+	ticker := time.NewTicker(5 * time.Second) // @TODO move the ticker timing to config or env variable
 	defer ticker.Stop()
 	for {
 		select {
