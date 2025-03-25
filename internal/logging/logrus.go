@@ -70,7 +70,7 @@ func NewLogService(config LoggingConfig) *LogService {
 		}
 	}
 	// Read batch size from environment variable
-	batchSize := 100 // Default value
+	batchSize := 5 // Default value
 
 	if envBatchSize := os.Getenv("LOG_BATCH_SIZE"); envBatchSize != "" {
 		if size, err := strconv.Atoi(envBatchSize); err == nil && size > 0 {
@@ -93,9 +93,9 @@ func NewLogService(config LoggingConfig) *LogService {
 
 func (l *LogService) processLogs(batchSize int) {
 	if batchSize <= 0 {
-		batchSize = 100 // Default to 1000 if not set or invalid
+		batchSize = 5 // Default to 1000 if not set or invalid
 	}
-	batch := make([]LogEntry, 0, batchSize) // Batch size of 5
+	batch := make([]LogEntry, 0, batchSize)
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 	for {
